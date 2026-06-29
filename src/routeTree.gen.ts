@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ResidentialRouteImport } from './routes/residential'
 import { Route as RentalRouteImport } from './routes/rental'
 import { Route as PropertiesRouteImport } from './routes/properties'
@@ -21,6 +22,11 @@ import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PropertiesIdRouteImport } from './routes/properties.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResidentialRoute = ResidentialRouteImport.update({
   id: '/residential',
   path: '/residential',
@@ -88,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/properties': typeof PropertiesRouteWithChildren
   '/rental': typeof RentalRoute
   '/residential': typeof ResidentialRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRoutesByTo {
@@ -101,6 +108,7 @@ export interface FileRoutesByTo {
   '/properties': typeof PropertiesRouteWithChildren
   '/rental': typeof RentalRoute
   '/residential': typeof ResidentialRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRoutesById {
@@ -115,6 +123,7 @@ export interface FileRoutesById {
   '/properties': typeof PropertiesRouteWithChildren
   '/rental': typeof RentalRoute
   '/residential': typeof ResidentialRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/properties/$id': typeof PropertiesIdRoute
 }
 export interface FileRouteTypes {
@@ -130,6 +139,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/rental'
     | '/residential'
+    | '/sitemap.xml'
     | '/properties/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -143,6 +153,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/rental'
     | '/residential'
+    | '/sitemap.xml'
     | '/properties/$id'
   id:
     | '__root__'
@@ -156,6 +167,7 @@ export interface FileRouteTypes {
     | '/properties'
     | '/rental'
     | '/residential'
+    | '/sitemap.xml'
     | '/properties/$id'
   fileRoutesById: FileRoutesById
 }
@@ -170,10 +182,18 @@ export interface RootRouteChildren {
   PropertiesRoute: typeof PropertiesRouteWithChildren
   RentalRoute: typeof RentalRoute
   ResidentialRoute: typeof ResidentialRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/residential': {
       id: '/residential'
       path: '/residential'
@@ -277,6 +297,7 @@ const rootRouteChildren: RootRouteChildren = {
   PropertiesRoute: PropertiesRouteWithChildren,
   RentalRoute: RentalRoute,
   ResidentialRoute: ResidentialRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
