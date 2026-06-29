@@ -85,7 +85,7 @@ function PropertyDetail() {
           <div>
             <p className="label-eyebrow mb-6">Features</p>
             <ul className="grid gap-3 sm:grid-cols-2">
-              {property.features.map((f) => (
+              {property.features.map((f: string) => (
                 <li key={f} className="flex items-center gap-3 text-foreground/80">
                   <Check className="h-4 w-4 text-primary flex-shrink-0" />
                   {f}
