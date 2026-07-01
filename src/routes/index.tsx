@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, ArrowLeft } from "lucide-react";
+import { ArrowRight, ArrowLeft, Home, Building2, Key, Mountain, TrendingUp } from "lucide-react";
 import heroVilla from "@/assets/hero-villa.jpg";
 import heroMarina from "@/assets/hero-marina.jpg";
 import heroPenthouse from "@/assets/hero-penthouse.jpg";
@@ -14,6 +14,12 @@ import { properties } from "@/data/properties";
 import { PropertyCard } from "@/components/property-card";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { RoiCalculator } from "@/components/roi-calculator";
+import { ProcessSteps } from "@/components/sections/process";
+import { Testimonials } from "@/components/sections/testimonials";
+import { Faq } from "@/components/sections/faq";
+import { Newsletter } from "@/components/sections/newsletter";
+import { Reveal } from "@/components/section-reveal";
+import { useMode } from "@/components/mode-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -34,25 +40,101 @@ function Index() {
       <HeroCarousel />
       <CategoriesStrip />
       <FeaturedSection />
+      <ProcessSteps />
       <WhyChooseUs />
       <RoiTeaser />
+      <Testimonials />
+      <Faq />
+      <Newsletter />
       <CtaBand />
     </>
   );
 }
 
-const slides = [
-  { image: heroVilla, area: "Emirates Hills", title: "Luxury Villa\nAt The Skyline", id: "luxury-villa-skyline" },
-  { image: heroMarina, area: "Dubai Marina", title: "Marina Sky\nResidence", id: "marina-sky-residence" },
-  { image: heroPenthouse, area: "Downtown Dubai", title: "Downtown\nPenthouse", id: "downtown-penthouse" },
-  { image: heroPalm, area: "Palm Jumeirah", title: "Beachfront\nMansion", id: "palm-beachfront-mansion" },
+type HeroTab = {
+  key: string;
+  label: string;
+  icon: typeof Home;
+  area: string;
+  title: string;
+  poster: string;
+  video: string;
+  href: "/residential" | "/commercial" | "/rental" | "/land" | "/investment";
+  linkLabel: string;
+  copy: string;
+};
+
+const HERO_VIDEO = "/videos/luxury-villa.mp4";
+
+const heroTabs: HeroTab[] = [
+  {
+    key: "residential",
+    label: "Residential",
+    icon: Home,
+    area: "Emirates Hills · Palm · Marina",
+    title: "Luxury Villa\nAt The Skyline",
+    poster: heroVilla,
+    video: HERO_VIDEO,
+    href: "/residential",
+    linkLabel: "Explore residential",
+    copy: "Villas, penthouses and apartments in Dubai's most exclusive addresses.",
+  },
+  {
+    key: "commercial",
+    label: "Commercial",
+    icon: Building2,
+    area: "Business Bay · DIFC",
+    title: "Grade-A Floors,\nCanal Views",
+    poster: propCommercial,
+    video: HERO_VIDEO,
+    href: "/commercial",
+    linkLabel: "Explore commercial",
+    copy: "Full-floor and boutique offices in Dubai's premier commercial districts.",
+  },
+  {
+    key: "rental",
+    label: "Rental",
+    icon: Key,
+    area: "Marina · Downtown · JVC",
+    title: "Move In.\nSettle Fast.",
+    poster: propRental,
+    video: HERO_VIDEO,
+    href: "/rental",
+    linkLabel: "Explore rentals",
+    copy: "Furnished and chiller-free residences with verified tenancies.",
+  },
+  {
+    key: "land",
+    label: "Land",
+    icon: Mountain,
+    area: "Al Marmoom · Dubai South",
+    title: "Build The\nNext Skyline.",
+    poster: propLand,
+    video: HERO_VIDEO,
+    href: "/land",
+    linkLabel: "Explore land",
+    copy: "Freehold plots — mapped, zoned and utility-ready for development.",
+  },
+  {
+    key: "investment",
+    label: "Invest",
+    icon: TrendingUp,
+    area: "Portfolio · Whole-tower · Off-plan",
+    title: "Dubai Yields,\nModelled Honestly.",
+    poster: heroMarina,
+    video: HERO_VIDEO,
+    href: "/investment",
+    linkLabel: "Model your ROI",
+    copy: "Income portfolios and pre-leased assets underwritten by our team.",
+  },
 ];
 
 function HeroCarousel() {
   const [i, setI] = useState(0);
-  const slide = slides[i];
-  const next = () => setI((p) => (p + 1) % slides.length);
-  const prev = () => setI((p) => (p - 1 + slides.length) % slides.length);
+  const { mode } = useMode();
+  const slide = heroTabs[i];
+  const next = () => setI((p) => (p + 1) % heroTabs.length);
+  const prev = () => setI((p) => (p - 1 + heroTabs.length) % heroTabs.length);
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-[#020b14] px-4 py-6 md:px-8 md:py-10">
@@ -64,9 +146,10 @@ function HeroCarousel() {
       <div className="relative mx-auto flex min-h-[calc(100vh-48px)] w-full max-w-[1400px] items-center justify-center pt-20 md:min-h-[calc(100vh-80px)] md:pt-0">
         <div className="relative h-[760px] max-h-[calc(100vh-80px)] min-h-[620px] w-full overflow-hidden rounded-[22px] border border-white/10 bg-[#051a31] shadow-[0_32px_90px_rgba(0,0,0,0.55)]">
           <video
-            className="absolute inset-0 h-full w-full object-cover"
-            src="/videos/luxury-villa.mp4"
-            poster={slide.image}
+            key={slide.key}
+            className="absolute inset-0 h-full w-full object-cover animate-fade-in"
+            src={slide.video}
+            poster={slide.poster}
             autoPlay
             muted
             loop
@@ -78,34 +161,52 @@ function HeroCarousel() {
 
           <div className="pointer-events-none absolute left-10 top-1/2 z-10 hidden -translate-y-1/2 md:block">
             <p className="rotate-[-90deg] text-[12px] font-semibold uppercase tracking-[0.32em] text-white/80">
-              Architecture Studio
+              {mode === "domestic" ? "Dubai · UAE" : "Global · Preview"}
             </p>
           </div>
 
-          <div className="absolute left-6 right-6 top-[22%] z-10 text-white md:left-[220px] md:right-auto md:top-[24%]">
+          {/* Category tabs */}
+          <div className="absolute left-6 right-6 top-[92px] z-20 flex flex-wrap gap-2 md:left-[220px] md:right-auto md:top-24">
+            {heroTabs.map((t, idx) => (
+              <button
+                key={t.key}
+                onClick={() => setI(idx)}
+                className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] transition-all ${
+                  idx === i
+                    ? "border-[#f5a623] bg-[#f5a623] text-[#020b14]"
+                    : "border-white/20 bg-white/5 text-white/85 hover:border-white/60 hover:text-white"
+                }`}
+              >
+                <t.icon className="h-3.5 w-3.5" />
+                {t.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="absolute left-6 right-6 top-[38%] z-10 text-white md:left-[220px] md:right-auto md:top-[32%]">
             <div className="mb-12 flex items-start gap-1">
               <span className="text-4xl font-extrabold leading-none md:text-[38px]">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <span className="mt-1 text-sm font-semibold text-white/80">/{String(slides.length).padStart(2, "0")}</span>
+              <span className="mt-1 text-sm font-semibold text-white/80">/{String(heroTabs.length).padStart(2, "0")}</span>
+              <span className="ml-6 mt-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-[#f5a623]">{slide.area}</span>
             </div>
 
-            <h1 className="max-w-[650px] text-[46px] font-extrabold leading-[0.95] tracking-[-0.06em] drop-shadow-xl sm:text-[64px] md:text-[78px] lg:text-[88px]">
+            <h1 key={slide.key} className="animate-fade-in max-w-[650px] text-[46px] font-extrabold leading-[0.95] tracking-[-0.06em] drop-shadow-xl sm:text-[64px] md:text-[78px] lg:text-[88px]">
               {slide.title.split("\n").map((line) => (
                 <span key={line} className="block">{line}</span>
               ))}
             </h1>
 
             <p className="mt-7 max-w-[455px] text-[15px] font-medium leading-relaxed text-white/90 md:text-[17px]">
-              We blend high-end architecture with nature to create timeless, luxurious living spaces.
+              {slide.copy}
             </p>
 
             <Link
-              to="/properties/$id"
-              params={{ id: slide.id }}
+              to={slide.href}
               className="group mt-10 inline-flex items-center gap-3 border-b-2 border-[#f5a623] pb-2 text-[13px] font-extrabold uppercase tracking-wide text-white transition-colors hover:text-[#f5a623]"
             >
-              View Project
+              {slide.linkLabel}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </Link>
           </div>
@@ -120,9 +221,9 @@ function HeroCarousel() {
           </div>
 
           <div className="absolute right-10 top-1/2 z-10 hidden -translate-y-1/2 flex-col gap-5 md:flex">
-            {slides.map((s, idx) => (
+            {heroTabs.map((s, idx) => (
               <button
-                key={s.id}
+                key={s.key}
                 onClick={() => setI(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
                 className={`h-3 w-3 rounded-full transition-all ${idx === i ? "bg-white scale-110" : "bg-white/35 hover:bg-white/65"}`}
@@ -171,19 +272,21 @@ function CategoriesStrip() {
 
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-5">
         {categories.map((c, idx) => (
-          <Link to={c.to} key={c.label} className="group relative aspect-[3/4] overflow-hidden block bg-card">
-            <img src={c.image} alt={c.label} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-60 transition-all duration-1000 group-hover:opacity-90 group-hover:scale-110" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-            <div className="relative h-full flex flex-col justify-between p-5">
-              <span className="text-xs tracking-[0.3em] text-foreground/60">0{idx + 1}</span>
-              <div>
-                <h3 className="text-2xl font-display font-semibold mb-2">{c.label}</h3>
-                <span className="text-[10px] uppercase tracking-[0.25em] text-primary inline-flex items-center gap-1">
-                  Explore <ArrowRight className="h-3 w-3" />
-                </span>
+          <Reveal key={c.label} delay={idx * 0.06}>
+            <Link to={c.to} className="group relative aspect-[3/4] overflow-hidden block bg-card border border-border/40 hover:border-primary/50 transition-colors">
+              <img src={c.image} alt={c.label} loading="lazy" className="absolute inset-0 h-full w-full object-cover opacity-55 transition-all duration-1000 group-hover:opacity-90 group-hover:scale-110" />
+              <div className="absolute inset-0 bg-gradient-to-t from-card via-card/60 to-transparent" />
+              <div className="relative h-full flex flex-col justify-between p-5">
+                <span className="text-xs tracking-[0.3em] text-foreground/60">0{idx + 1}</span>
+                <div>
+                  <h3 className="text-2xl font-display font-semibold mb-2">{c.label}</h3>
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-primary inline-flex items-center gap-1">
+                    Explore <ArrowRight className="h-3 w-3" />
+                  </span>
+                </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </Reveal>
         ))}
       </div>
     </section>
