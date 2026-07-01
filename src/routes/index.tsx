@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { ArrowRight, ArrowLeft, Phone } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 import heroVilla from "@/assets/hero-villa.jpg";
 import heroMarina from "@/assets/hero-marina.jpg";
 import heroPenthouse from "@/assets/hero-penthouse.jpg";
@@ -14,7 +14,6 @@ import { properties } from "@/data/properties";
 import { PropertyCard } from "@/components/property-card";
 import { WhyChooseUs } from "@/components/why-choose-us";
 import { RoiCalculator } from "@/components/roi-calculator";
-import { useMode } from "@/components/mode-context";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -54,65 +53,94 @@ function HeroCarousel() {
   const slide = slides[i];
   const next = () => setI((p) => (p + 1) % slides.length);
   const prev = () => setI((p) => (p - 1 + slides.length) % slides.length);
-  const { mode } = useMode();
 
   return (
-    <section className="relative min-h-screen flex items-end overflow-hidden">
-      {slides.map((s, idx) => (
-        <img
-          key={s.id}
-          src={s.image}
-          alt={s.title}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${idx === i ? "opacity-100" : "opacity-0"}`}
-        />
-      ))}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-background/30" />
-
-      {/* Vertical label */}
-      <div className="hidden lg:block absolute left-8 top-1/2 -translate-y-1/2 z-10">
-        <span className="text-vertical text-foreground/50">Archigram · Dubai · 2026</span>
+    <section className="relative min-h-screen overflow-hidden bg-[#020b14] px-4 py-6 md:px-8 md:py-10">
+      <div className="absolute inset-0">
+        <img src={heroVilla} alt="Luxury villa backdrop" className="h-full w-full object-cover opacity-35 blur-sm scale-110" />
+        <div className="absolute inset-0 bg-[#020b14]/75" />
       </div>
 
-      <div className="relative w-full container-edge pb-24 md:pb-32 pt-32">
-        <div className="flex items-center gap-4 mb-10 text-sm tracking-[0.3em] text-foreground/70">
-          <span className="text-5xl font-display text-foreground">{String(i + 1).padStart(2, "0")}</span>
-          <span className="text-foreground/40">/ {String(slides.length).padStart(2, "0")}</span>
-        </div>
+      <div className="relative mx-auto flex min-h-[calc(100vh-48px)] w-full max-w-[1400px] items-center justify-center pt-20 md:min-h-[calc(100vh-80px)] md:pt-0">
+        <div className="relative h-[760px] max-h-[calc(100vh-80px)] min-h-[620px] w-full overflow-hidden rounded-[22px] border border-white/10 bg-[#051a31] shadow-[0_32px_90px_rgba(0,0,0,0.55)]">
+          <video
+            className="absolute inset-0 h-full w-full object-cover"
+            src="/videos/luxury-villa.mp4"
+            poster={slide.image}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
 
-        <p className="label-eyebrow mb-6">{slide.area} · {mode === "domestic" ? "Dubai" : "International"}</p>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#03101f]/90 via-[#062b57]/45 to-[#03101f]/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-[#00386b]/25" />
 
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-display font-semibold tracking-tight leading-[0.95] whitespace-pre-line max-w-4xl">
-          {slide.title}
-        </h1>
+          <div className="pointer-events-none absolute left-10 top-1/2 z-10 hidden -translate-y-1/2 md:block">
+            <p className="rotate-[-90deg] text-[12px] font-semibold uppercase tracking-[0.32em] text-white/80">
+              Architecture Studio
+            </p>
+          </div>
 
-        <p className="mt-8 max-w-md text-foreground/70 leading-relaxed">
-          It is through our combined efforts that the greatest solutions shine through. Discover the new.
-        </p>
+          <div className="absolute left-6 right-6 top-[22%] z-10 text-white md:left-[220px] md:right-auto md:top-[24%]">
+            <div className="mb-12 flex items-start gap-1">
+              <span className="text-4xl font-extrabold leading-none md:text-[38px]">
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <span className="mt-1 text-sm font-semibold text-white/80">/{String(slides.length).padStart(2, "0")}</span>
+            </div>
 
-        <div className="mt-10 flex flex-wrap items-center gap-6">
-          <Link
-            to="/properties/$id"
-            params={{ id: slide.id }}
-            className="group inline-flex items-center gap-3 px-6 py-3 border border-primary/50 text-primary hover:bg-primary hover:text-primary-foreground text-xs uppercase tracking-[0.25em] transition-all"
-          >
-            View more
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+            <h1 className="max-w-[650px] text-[46px] font-extrabold leading-[0.95] tracking-[-0.06em] drop-shadow-xl sm:text-[64px] md:text-[78px] lg:text-[88px]">
+              {slide.title.split("\n").map((line) => (
+                <span key={line} className="block">{line}</span>
+              ))}
+            </h1>
 
-          <div className="flex items-center gap-2 ml-auto">
-            <button onClick={prev} aria-label="Previous" className="w-12 h-12 border border-border/40 text-foreground/70 hover:border-primary hover:text-primary flex items-center justify-center transition-all">
-              <ArrowLeft className="h-4 w-4" />
+            <p className="mt-7 max-w-[455px] text-[15px] font-medium leading-relaxed text-white/90 md:text-[17px]">
+              We blend high-end architecture with nature to create timeless, luxurious living spaces.
+            </p>
+
+            <Link
+              to="/properties/$id"
+              params={{ id: slide.id }}
+              className="group mt-10 inline-flex items-center gap-3 border-b-2 border-[#f5a623] pb-2 text-[13px] font-extrabold uppercase tracking-wide text-white transition-colors hover:text-[#f5a623]"
+            >
+              View Project
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+
+          <div className="absolute bottom-[25%] right-[12%] z-10 hidden overflow-hidden rounded-sm bg-white text-[#05101f] shadow-2xl md:flex">
+            <button onClick={prev} aria-label="Previous" className="grid h-16 w-16 place-items-center border-r border-black/10 transition-colors hover:bg-[#f5a623]">
+              <ArrowLeft className="h-5 w-5" />
             </button>
-            <button onClick={next} aria-label="Next" className="w-12 h-12 border border-border/40 text-foreground/70 hover:border-primary hover:text-primary flex items-center justify-center transition-all">
-              <ArrowRight className="h-4 w-4" />
+            <button onClick={next} aria-label="Next" className="grid h-16 w-16 place-items-center transition-colors hover:bg-[#f5a623]">
+              <ArrowRight className="h-5 w-5" />
             </button>
           </div>
-        </div>
-      </div>
 
-      <div className="absolute right-6 bottom-6 hidden md:flex items-center gap-2 text-xs text-foreground/60">
-        <Phone className="h-3 w-3 text-primary" />
-        Call us: +971 4 800 ARCH
+          <div className="absolute right-10 top-1/2 z-10 hidden -translate-y-1/2 flex-col gap-5 md:flex">
+            {slides.map((s, idx) => (
+              <button
+                key={s.id}
+                onClick={() => setI(idx)}
+                aria-label={`Go to slide ${idx + 1}`}
+                className={`h-3 w-3 rounded-full transition-all ${idx === i ? "bg-white scale-110" : "bg-white/35 hover:bg-white/65"}`}
+              />
+            ))}
+          </div>
+
+          <div className="absolute bottom-10 left-8 z-10 flex items-center gap-6 text-white md:left-12">
+            <span className="text-sm font-bold">𝕏</span>
+            <span className="text-sm font-bold">f</span>
+            <span className="text-sm font-bold">◎</span>
+            <span className="text-sm font-bold">p</span>
+          </div>
+
+          <div className="absolute bottom-10 right-8 z-10 hidden text-[12px] font-extrabold uppercase tracking-wide text-white md:block">
+            Call us: (+001) 1234 56 78 90
+          </div>
+        </div>
       </div>
     </section>
   );

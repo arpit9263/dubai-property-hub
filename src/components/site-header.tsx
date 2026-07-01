@@ -1,71 +1,48 @@
 import { Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Menu, X, Building2 } from "lucide-react";
-import { useMode } from "./mode-context";
-import { cn } from "@/lib/utils";
+import { ChevronDown, Home, Menu, X } from "lucide-react";
 
 const navLinks = [
   { to: "/", label: "Home" },
-  { to: "/properties", label: "Properties" },
-  { to: "/investment", label: "Investment" },
-  { to: "/about", label: "About" },
-  { to: "/contact", label: "Contact" },
+  { to: "/about", label: "About Us" },
+  { to: "/properties", label: "Projects" },
+  { to: "/investment", label: "Blog" },
+  { to: "/contact", label: "Contacts" },
 ] as const;
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const { mode, setMode } = useMode();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md bg-background/40 border-b border-border/30">
-      <div className="container-edge flex h-20 items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <Building2 className="h-5 w-5 text-primary" />
-          <span className="font-display font-bold tracking-wider text-foreground">
-            ARCHIGRAM
-          </span>
+    <header className="fixed inset-x-0 top-0 z-50 bg-transparent px-4 pt-4 md:px-8 md:pt-8 pointer-events-none">
+      <div className="mx-auto flex h-20 w-full max-w-[1400px] items-center justify-between px-5 text-white md:px-12 pointer-events-auto">
+        <Link to="/" className="flex items-center gap-2 text-white">
+          <Home className="h-5 w-5 stroke-[2.4]" />
+          <span className="text-lg font-extrabold tracking-[-0.02em] md:text-xl">ARCHIGRAM</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((l) => (
+        <nav className="hidden items-center gap-9 md:flex">
+          {navLinks.map((item) => (
             <Link
-              key={l.to}
-              to={l.to}
-              className="text-xs uppercase tracking-[0.2em] text-foreground/70 hover:text-primary transition-colors"
-              activeProps={{ className: "text-primary" }}
-              activeOptions={{ exact: l.to === "/" }}
+              key={item.to}
+              to={item.to}
+              className="text-[11px] font-bold uppercase tracking-[-0.01em] text-white/90 transition-colors hover:text-[#f5a623]"
+              activeProps={{ className: "text-[#f5a623]" }}
+              activeOptions={{ exact: item.to === "/" }}
             >
-              {l.label}
+              {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="hidden md:flex items-center gap-4">
-          <div className="flex items-center rounded-full border border-border/50 p-1 text-[10px] uppercase tracking-[0.18em]">
-            <button
-              onClick={() => setMode("domestic")}
-              className={cn(
-                "px-3 py-1 rounded-full transition-all",
-                mode === "domestic" ? "bg-primary text-primary-foreground" : "text-foreground/60"
-              )}
-            >
-              Domestic
-            </button>
-            <button
-              onClick={() => setMode("international")}
-              className={cn(
-                "px-3 py-1 rounded-full transition-all",
-                mode === "international" ? "bg-primary text-primary-foreground" : "text-foreground/60"
-              )}
-            >
-              International
-            </button>
-          </div>
+        <div className="hidden items-center gap-2 text-[11px] font-bold uppercase text-white md:flex">
+          ENG <ChevronDown className="h-4 w-4" />
         </div>
 
         <button
-          onClick={() => setOpen((o) => !o)}
-          className="md:hidden text-foreground"
+          type="button"
+          onClick={() => setOpen((value) => !value)}
+          className="rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur md:hidden"
           aria-label="Toggle menu"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -73,38 +50,18 @@ export function SiteHeader() {
       </div>
 
       {open && (
-        <div className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-md">
-          <nav className="container-edge flex flex-col py-6 gap-4">
-            {navLinks.map((l) => (
+        <div className="mx-auto mt-2 w-[calc(100%-2rem)] max-w-[1400px] overflow-hidden rounded-3xl border border-white/10 bg-[#031b35]/95 p-5 text-white shadow-2xl backdrop-blur-xl pointer-events-auto md:hidden">
+          <nav className="flex flex-col gap-4">
+            {navLinks.map((item) => (
               <Link
-                key={l.to}
-                to={l.to}
+                key={item.to}
+                to={item.to}
                 onClick={() => setOpen(false)}
-                className="text-sm uppercase tracking-[0.2em] text-foreground/80 hover:text-primary"
+                className="border-b border-white/10 pb-3 text-sm font-bold uppercase tracking-wide text-white/85 last:border-0"
               >
-                {l.label}
+                {item.label}
               </Link>
             ))}
-            <div className="flex items-center gap-2 pt-4 border-t border-border/30">
-              <button
-                onClick={() => setMode("domestic")}
-                className={cn(
-                  "flex-1 px-3 py-2 text-[10px] uppercase tracking-[0.18em] rounded-full border",
-                  mode === "domestic" ? "bg-primary text-primary-foreground border-primary" : "border-border/50 text-foreground/60"
-                )}
-              >
-                Domestic
-              </button>
-              <button
-                onClick={() => setMode("international")}
-                className={cn(
-                  "flex-1 px-3 py-2 text-[10px] uppercase tracking-[0.18em] rounded-full border",
-                  mode === "international" ? "bg-primary text-primary-foreground border-primary" : "border-border/50 text-foreground/60"
-                )}
-              >
-                International
-              </button>
-            </div>
           </nav>
         </div>
       )}
