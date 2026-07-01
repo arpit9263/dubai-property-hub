@@ -29,6 +29,7 @@ function InvestmentPage() {
         title="Dubai yields, modelled honestly."
         subtitle="Diversified income portfolios, single-asset opportunities and pre-leased commercial — all underwritten by our in-house team."
         image={heroMarina}
+        video="/videos/luxury-villa.mp4"
       />
 
       <section className="container-edge pb-24">
