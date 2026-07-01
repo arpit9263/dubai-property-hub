@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { properties, type PropertyCategory } from "@/data/properties";
 import { PropertyCard } from "@/components/property-card";
 import { PageHero } from "@/components/page-hero";
 import { cn } from "@/lib/utils";
-import { useMode } from "@/components/mode-context";
+import { ModeNotice } from "@/components/mode-notice";
 
 export const Route = createFileRoute("/properties")({
   head: () => ({
@@ -29,7 +29,6 @@ const tabs: Array<{ value: PropertyCategory | "all"; label: string }> = [
 
 function PropertiesPage() {
   const [filter, setFilter] = useState<PropertyCategory | "all">("all");
-  const { mode } = useMode();
   const items = filter === "all" ? properties : properties.filter((p) => p.category === filter);
 
   return (
@@ -38,16 +37,9 @@ function PropertiesPage() {
         eyebrow="Portfolio"
         title="Every Archigram listing."
         subtitle="Filter by category, compare and shortlist. Every listing verified by our acquisitions team."
+        video="/videos/luxury-villa.mp4"
       />
-
-      {mode === "international" && (
-        <div className="container-edge -mt-4 mb-8">
-          <div className="bg-primary/10 border border-primary/30 p-4 text-sm text-primary text-center">
-            International mode currently shows Dubai inventory.{" "}
-            <Link to="/international" className="underline">More</Link>
-          </div>
-        </div>
-      )}
+      <ModeNotice />
 
       <section className="container-edge pb-32">
         <div className="flex flex-wrap gap-2 mb-10 border-b border-border/30 pb-6">

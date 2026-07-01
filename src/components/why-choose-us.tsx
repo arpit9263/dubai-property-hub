@@ -1,4 +1,5 @@
 import { ShieldCheck, BadgeCheck, FileCheck2, Sparkles } from "lucide-react";
+import { Reveal } from "@/components/section-reveal";
 
 const pillars = [
   {
@@ -38,13 +39,18 @@ export function WhyChooseUs() {
         </p>
       </div>
 
-      <div className="grid gap-px bg-border/30 md:grid-cols-2 lg:grid-cols-4">
-        {pillars.map((p) => (
-          <div key={p.title} className="bg-background p-8 hover:bg-card transition-colors group">
-            <p.icon className="h-7 w-7 text-primary mb-6" />
-            <h3 className="text-lg font-display font-semibold mb-3">{p.title}</h3>
-            <p className="text-sm text-foreground/60 leading-relaxed">{p.body}</p>
-          </div>
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        {pillars.map((p, i) => (
+          <Reveal key={p.title} delay={i * 0.08}>
+            <div className="group relative h-full overflow-hidden bg-card border border-border/40 p-8 hover:border-primary/60 transition-colors">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              <div className="grid h-12 w-12 place-items-center bg-primary/10 text-primary mb-6 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                <p.icon className="h-5 w-5" />
+              </div>
+              <h3 className="text-lg font-display font-semibold mb-3">{p.title}</h3>
+              <p className="text-sm text-foreground/60 leading-relaxed">{p.body}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
     </section>

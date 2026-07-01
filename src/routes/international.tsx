@@ -31,6 +31,7 @@ function International() {
         title="A global address, on our terms."
         subtitle="Archigram launches in Dubai first. Verified inventory in additional markets is rolling out through 2027."
         image={heroPalm}
+        video="/videos/luxury-villa.mp4"
       />
 
       <section className="container-edge pb-24">

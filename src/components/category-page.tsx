@@ -3,8 +3,7 @@ import { properties } from "@/data/properties";
 import { PropertyCard } from "@/components/property-card";
 import { PageHero } from "@/components/page-hero";
 import { MapView } from "@/components/map-view";
-import { useMode } from "@/components/mode-context";
-import { Link } from "@tanstack/react-router";
+import { ModeNotice } from "@/components/mode-notice";
 
 type Props = {
   category: PropertyCategory;
@@ -17,20 +16,11 @@ type Props = {
 
 export function CategoryPage({ category, eyebrow, title, subtitle, heroImage, showMap }: Props) {
   const items = properties.filter((p) => p.category === category);
-  const { mode } = useMode();
 
   return (
     <>
-      <PageHero eyebrow={eyebrow} title={title} subtitle={subtitle} image={heroImage} />
-
-      {mode === "international" && (
-        <div className="container-edge -mt-4 mb-10">
-          <div className="bg-primary/10 border border-primary/30 p-4 text-sm text-primary text-center">
-            International mode is currently limited — showing Dubai listings only.{" "}
-            <Link to="/international" className="underline">Learn more</Link>
-          </div>
-        </div>
-      )}
+      <PageHero eyebrow={eyebrow} title={title} subtitle={subtitle} image={heroImage} video="/videos/luxury-villa.mp4" />
+      <ModeNotice />
 
       {showMap && (
         <section className="container-edge pb-16">

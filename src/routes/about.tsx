@@ -24,6 +24,7 @@ function AboutPage() {
         title="Built for buyers who refuse to gamble."
         subtitle="We launched Archigram because Dubai deserves a property marketplace where verification comes before velocity. Every listing, every party, every document — checked."
         image={heroVilla}
+        video="/videos/luxury-villa.mp4"
       />
 
       <section className="container-edge pb-24 grid gap-12 lg:grid-cols-2 items-start">

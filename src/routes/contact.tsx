@@ -39,6 +39,7 @@ function ContactPage() {
         eyebrow="Contact"
         title="Speak to an advisor."
         subtitle="Whether you're buying, selling or investing — our Dubai team responds within 24 hours."
+        video="/videos/luxury-villa.mp4"
       />
 
       <section className="container-edge pb-24 grid gap-16 lg:grid-cols-2">
